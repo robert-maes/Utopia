@@ -10,7 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/")
 public class IndexController extends HttpServlet {
 
-  public void doGet(HttpServletRequest request, HttpServletResponse response) {
+  @Override
+  protected void doGet(
+    HttpServletRequest request,
+    HttpServletResponse response
+  ) {
     response.setContentType("text/html");
     response.setStatus(200);
     try (PrintWriter printWriter = response.getWriter()) {
