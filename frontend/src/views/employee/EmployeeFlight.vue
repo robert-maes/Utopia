@@ -29,16 +29,16 @@
               | Departure Time:
               {{ departureDateTime.toLocaleTimeString("en-US") }}
               <br />
-              Arrival Date: ??? | Arrival Time: ???
+              Arrival Date: {{ arrivalDateTime.toLocaleDateString("en-US") }} |
+              Arrival Time: {{ arrivalDateTime.toLocaleTimeString("en-US") }}
             </p>
             <p>
               Available Seats by Class:
-              <br />
-              1) First &rarr; X
-              <br />
-              2) Business &rarr; Y
-              <br />
-              3) Economy &rarr; Z
+              <ol>
+                <li v-for="seatClass in seatsByClass" :key="seatClass[0]">
+                  {{seatClass[0]}} &rarr; {{seatClass[1]}}
+                </li>
+              </ol>
             </p>
           </div>
         </li>
@@ -47,7 +47,9 @@
             >Upate the details of the Flight</router-link
           >
         </li>
-        <li>Add seats to the Flight</li>
+        <li><router-link :to="`/emp/main/flight/${flightId}/seats`"
+            >Add Seats to the Flight</router-link
+          ></li>
       </ul>
     </div>
   </div>
@@ -78,16 +80,31 @@ export default defineComponent({
     //TODO: fix time
     const departureDateTime = computed(() => {
       if (flight.value && flight.value.departureTime) {
-        const departureTime = flight.value.departureTime;
-        return new Date(
-          departureTime[0],
-          departureTime[1],
-          departureTime[2],
-          departureTime[3],
-          departureTime[4],
-          departureTime[5],
-          0
-        );
+        return new Date(flight.value.departureTime * 1000);
+      }
+    });
+
+    const arrivalDateTime = computed(() => {
+      if (flight.value && flight.value.arrivalTime) {
+        return new Date(flight.value.arrivalTime * 1000);
+      }
+    });
+
+    const seatsByClass = computed(() => {
+      if (flight.value && flight.value.seats) {
+        const seats = flight.value.seats;
+        console.log(seats);
+        const classMap = new Map();
+        seats.forEach(seat => {
+          console.log(seat);
+          const count = classMap.get(seat.type.classification);
+          if (count) {
+            classMap.set(seat.type.classification, count + 1);
+          } else {
+            classMap.set(seat.type.classification, 1);
+          }
+        })
+        return classMap;
       }
     });
 
@@ -123,6 +140,8 @@ export default defineComponent({
       error,
       showDetails,
       departureDateTime,
+      arrivalDateTime,
+      seatsByClass
     };
   },
 });

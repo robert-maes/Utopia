@@ -11,6 +11,7 @@ import EmployeeFlight from "../views/employee/EmployeeFlight.vue";
 import EmployeeUpdateFlight from "../views/employee/EmployeeUpdateFlight.vue";
 import AdminFlights from "../views/admin/AdminFlights.vue";
 import AdminAddFlight from "../views/admin/AdminAddFlight.vue";
+import EmployeeFlightAddSeats from "../views/employee/EmployeeFlightAddSeats.vue";
 
 const routes = [
   {
@@ -65,6 +66,12 @@ const routes = [
         path: "main/flight/:flightId/update",
         name: "Employee Update Flight",
         component: EmployeeUpdateFlight,
+        props: true,
+      },
+      {
+        path: "main/flight/:flightId/seats",
+        name: "Employe Add Seats to Flight",
+        component: EmployeeFlightAddSeats,
         props: true,
       },
     ],

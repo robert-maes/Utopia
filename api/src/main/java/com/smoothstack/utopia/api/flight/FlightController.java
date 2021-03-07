@@ -26,6 +26,14 @@ public class FlightController {
     return flightService.getFlight(flightId);
   }
 
+  @PostMapping(path = "{flightId}/seats")
+  public void addSeatsToFlight(
+    @PathVariable("flightId") Long flightId,
+    @RequestBody AddSeatsInput addSeatsInput
+  ) {
+    flightService.addSeats(flightId, addSeatsInput);
+  }
+
   @PutMapping(path = "{flightId}")
   public void updateFlight(
     @PathVariable("flightId") Long flightId,

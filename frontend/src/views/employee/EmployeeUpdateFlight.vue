@@ -151,22 +151,23 @@ export default defineComponent({
     //TODO: fix time
     const departureDateTime = computed(() => {
       if (flight.value && flight.value.departureTime) {
-        const departureTime = flight.value.departureTime;
-        return new Date(
-          departureTime[0],
-          departureTime[1],
-          departureTime[2],
-          departureTime[3],
-          departureTime[4],
-          departureTime[5],
-          0
-        );
+        return new Date(flight.value.departureTime * 1000);
       }
     });
 
     const updateFlight = async () => {
       canSubmit.value = false;
       try {
+        const reconsDate = new Date();
+        const dateSplit = departureDate.value.split("-");
+        reconsDate.setFullYear(dateSplit[0]);
+        reconsDate.setMonth(dateSplit[1] - 1);
+        reconsDate.setDate(dateSplit[2]);
+        const timeSplit = departureTime.value.split(":");
+        reconsDate.setHours(timeSplit[0]);
+        reconsDate.setMinutes(timeSplit[1]);
+        const unixTime = Math.floor(reconsDate.getTime() / 1000);
+        console.log(unixTime);
         const result = await fetch(`${BASE_URL}/flight/${props.flightId}`, {
           method: "put",
           headers: {
@@ -177,8 +178,7 @@ export default defineComponent({
             originCity: originCity.value,
             destinationAirport: destinationAirport.value,
             destinationCity: destinationCity.value,
-            departureDate: departureDate.value,
-            departureTime: departureTime.value,
+            departureTimestamp: unixTime,
           }),
         });
       } catch (err) {
@@ -208,18 +208,12 @@ export default defineComponent({
         originCity.value = flight.value.route.origin.city;
         destinationAirport.value = flight.value.route.destination.iataId;
         destinationCity.value = flight.value.route.destination.city;
-        console.log(destinationCity.value);
-        const departureDateTime = flight.value.departureTime;
-        const departureDateObject = new Date(
-          departureDateTime[0],
-          departureDateTime[1],
-          departureDateTime[2],
-          departureDateTime[3],
-          departureDateTime[4],
-          departureDateTime[5]
-        );
+        console.log(flight.value.departureTime);
+        const departureDateObject = new Date(flight.value.departureTime * 1000);
+        console.log(departureDateObject.toString());
         departureDate.value = `${departureDateObject.getFullYear()}-${(
-          "0" + departureDateObject.getMonth()
+          "0" +
+          (departureDateObject.getMonth() + 1)
         ).slice(-2)}-${("0" + departureDateObject.getDate()).slice(-2)}`;
         departureTime.value = `${departureDateObject.getHours()}:${departureDateObject.getMinutes()}`;
       } catch (err) {
