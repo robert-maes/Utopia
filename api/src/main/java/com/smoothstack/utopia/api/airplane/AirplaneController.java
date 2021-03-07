@@ -1,4 +1,4 @@
-package com.smoothstack.utopia.api.airport;
+package com.smoothstack.utopia.api.airplane;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping(path = "/airport")
-public class AirportController {
+@RequestMapping(path = "/airplane")
+public class AirplaneController {
 
-  private final AirportService airportService;
+  private final AirplaneService airplaneService;
 
   @Autowired
-  public AirportController(AirportService airportService) {
-    this.airportService = airportService;
+  public AirplaneController(AirplaneService airplaneService) {
+    this.airplaneService = airplaneService;
   }
 
   @GetMapping
-  public List<Airport> getAirports() {
-    return airportService.getAirports();
+  public List<Airplane> getAirplanes() {
+    return airplaneService.getAirplanes();
   }
 }

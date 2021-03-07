@@ -5,10 +5,10 @@ import com.smoothstack.utopia.api.route.Route;
 import java.util.List;
 import javax.persistence.*;
 
-@JsonIdentityInfo(
-  generator = ObjectIdGenerators.PropertyGenerator.class,
-  property = "iataId"
-)
+//@JsonIdentityInfo(
+//  generator = ObjectIdGenerators.PropertyGenerator.class,
+//  property = "iataId"
+//)
 @Entity
 @Table
 public class Airport {
