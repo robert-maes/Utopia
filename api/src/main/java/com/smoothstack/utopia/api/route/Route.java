@@ -1,6 +1,7 @@
 package com.smoothstack.utopia.api.route;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.smoothstack.utopia.api.airport.Airport;
@@ -29,6 +30,7 @@ public class Route {
   @JoinColumn(name = "destination_id", nullable = false)
   private Airport destination;
 
+  @JsonIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "route")
   private List<Flight> flights;

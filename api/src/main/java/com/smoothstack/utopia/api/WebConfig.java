@@ -1,5 +1,6 @@
 package com.smoothstack.utopia.api;
 
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +39,7 @@ public class WebConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public Hibernate5Module hibernate5Module() {
+  public Module hibernate5Module() {
     return new Hibernate5Module();
   }
 }

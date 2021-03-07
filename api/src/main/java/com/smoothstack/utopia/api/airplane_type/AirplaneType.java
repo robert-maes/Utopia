@@ -1,8 +1,6 @@
 package com.smoothstack.utopia.api.airplane_type;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.smoothstack.utopia.api.airplane.Airplane;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +21,7 @@ public class AirplaneType {
 
   private Integer maxCapacity;
 
+  @JsonIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "type")
   private List<Airplane> airplanes;

@@ -1,9 +1,13 @@
-package com.smoothstack.utopia.api.airplane;
+package com.smoothstack.utopia.api.seat;
 
-import com.fasterxml.jackson.annotation.*;
-import com.smoothstack.utopia.api.airplane_type.AirplaneType;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.smoothstack.utopia.api.flight.Flight;
+import com.smoothstack.utopia.api.seat_type.SeatType;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 
 @JsonIdentityInfo(
@@ -12,7 +16,7 @@ import javax.persistence.*;
 )
 @Entity
 @Table
-public class Airplane {
+public class Seat {
 
   @Id
   @Column(columnDefinition = "int")
@@ -21,20 +25,20 @@ public class Airplane {
 
   @ManyToOne
   @JoinColumn(name = "type_id", nullable = false)
-  private AirplaneType type;
+  private SeatType type;
 
   @JsonIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "airplane")
-  private List<Flight> flights;
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "seats")
+  private Set<Flight> flights;
 
-  public Airplane() {}
+  public Seat() {}
 
-  public Airplane(AirplaneType type) {
+  public Seat(SeatType type) {
     this.type = type;
   }
 
-  public Airplane(Long id, AirplaneType type) {
+  public Seat(Long id, SeatType type) {
     this.id = id;
     this.type = type;
   }
@@ -47,20 +51,20 @@ public class Airplane {
     this.id = id;
   }
 
-  public AirplaneType getType() {
+  public SeatType getType() {
     return type;
   }
 
-  public void setType(AirplaneType type) {
+  public void setType(SeatType type) {
     this.type = type;
   }
 
-  public List<Flight> getFlights() {
+  public Set<Flight> getFlights() {
     return flights;
   }
 
   @Override
   public String toString() {
-    return "Airplane{" + "id=" + id + ", type=" + type + '}';
+    return "Seat{" + "id=" + id + ", type=" + type + '}';
   }
 }

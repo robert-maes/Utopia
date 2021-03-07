@@ -19,10 +19,12 @@ public class Airport {
 
   private String city;
 
+  @JsonIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "destination")
   private List<Route> arrivals;
 
+  @JsonIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "origin")
   private List<Route> departures;

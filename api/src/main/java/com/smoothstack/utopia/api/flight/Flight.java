@@ -1,13 +1,17 @@
 package com.smoothstack.utopia.api.flight;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.smoothstack.utopia.api.airplane.Airplane;
 import com.smoothstack.utopia.api.booking.Booking;
 import com.smoothstack.utopia.api.route.Route;
+import com.smoothstack.utopia.api.seat.Seat;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 
 @JsonIdentityInfo(
@@ -31,12 +35,13 @@ public class Flight {
   @JoinColumn(name = "airplane_id", nullable = false)
   private Airplane airplane;
 
-  private LocalDateTime departureTime;
+  private Instant departureTime;
+  private Instant arrivalTime;
   private Integer reservedSeats;
   private Float seatPrice;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  @ManyToMany(fetch = FetchType.LAZY)
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
     name = "flight_bookings",
     joinColumns = @JoinColumn(name = "flight_id"),
@@ -44,18 +49,29 @@ public class Flight {
   )
   private List<Booking> bookings;
 
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+    name = "flight_seats",
+    joinColumns = @JoinColumn(name = "flight_id"),
+    inverseJoinColumns = @JoinColumn(name = "seat_id")
+  )
+  private Set<Seat> seats;
+
   public Flight() {}
 
   public Flight(
     Route route,
     Airplane airplane,
-    LocalDateTime departureTime,
+    Instant departureTime,
+    Instant arrivalTime,
     Integer reservedSeats,
     Float seatPrice
   ) {
     this.route = route;
     this.airplane = airplane;
     this.departureTime = departureTime;
+    this.arrivalTime = arrivalTime;
     this.reservedSeats = reservedSeats;
     this.seatPrice = seatPrice;
   }
@@ -64,7 +80,8 @@ public class Flight {
     Long id,
     Route route,
     Airplane airplane,
-    LocalDateTime departureTime,
+    Instant departureTime,
+    Instant arrivalTime,
     Integer reservedSeats,
     Float seatPrice
   ) {
@@ -72,6 +89,7 @@ public class Flight {
     this.route = route;
     this.airplane = airplane;
     this.departureTime = departureTime;
+    this.arrivalTime = arrivalTime;
     this.reservedSeats = reservedSeats;
     this.seatPrice = seatPrice;
   }
@@ -100,11 +118,11 @@ public class Flight {
     this.airplane = airplane;
   }
 
-  public LocalDateTime getDepartureTime() {
+  public Instant getDepartureTime() {
     return departureTime;
   }
 
-  public void setDepartureTime(LocalDateTime departureTime) {
+  public void setDepartureTime(Instant departureTime) {
     this.departureTime = departureTime;
   }
 
@@ -126,6 +144,18 @@ public class Flight {
 
   public List<Booking> getBookings() {
     return bookings;
+  }
+
+  public Set<Seat> getSeats() {
+    return seats;
+  }
+
+  public Instant getArrivalTime() {
+    return arrivalTime;
+  }
+
+  public void setArrivalTime(Instant arrivalTime) {
+    this.arrivalTime = arrivalTime;
   }
 
   @Override
