@@ -3,12 +3,9 @@ package com.smoothstack.utopia.api.airport;
 import com.fasterxml.jackson.annotation.*;
 import com.smoothstack.utopia.api.route.Route;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 
-//@JsonIdentityInfo(
-//  generator = ObjectIdGenerators.PropertyGenerator.class,
-//  property = "iataId"
-//)
 @Entity
 @Table
 public class Airport {
@@ -19,15 +16,15 @@ public class Airport {
 
   private String city;
 
-  @JsonIgnore
+  @JsonIgnoreProperties({ "origin", "destination" })
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "destination")
-  private List<Route> arrivals;
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "destination")
+  private Set<Route> arrivals;
 
-  @JsonIgnore
+  @JsonIgnoreProperties({ "origin", "destination" })
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "origin")
-  private List<Route> departures;
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "origin")
+  private Set<Route> departures;
 
   public Airport() {}
 
@@ -52,11 +49,11 @@ public class Airport {
     this.city = city;
   }
 
-  public List<Route> getArrivals() {
+  public Set<Route> getArrivals() {
     return arrivals;
   }
 
-  public List<Route> getDepartures() {
+  public Set<Route> getDepartures() {
     return departures;
   }
 

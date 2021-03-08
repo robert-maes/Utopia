@@ -5,4 +5,9 @@
 
 <script setup></script>
 
-<style></style>
+<style>
+th,
+td {
+  padding: 10px;
+}
+</style>

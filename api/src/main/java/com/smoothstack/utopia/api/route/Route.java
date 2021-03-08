@@ -1,18 +1,12 @@
 package com.smoothstack.utopia.api.route;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.smoothstack.utopia.api.airport.Airport;
 import com.smoothstack.utopia.api.flight.Flight;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 
-@JsonIdentityInfo(
-  generator = ObjectIdGenerators.PropertyGenerator.class,
-  property = "id"
-)
 @Entity
 @Table
 public class Route {
@@ -22,18 +16,20 @@ public class Route {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @JsonManagedReference
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "origin_id", nullable = false)
   private Airport origin;
 
-  @ManyToOne
+  @JsonManagedReference
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "destination_id", nullable = false)
   private Airport destination;
 
-  @JsonIgnore
+  @JsonBackReference
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "route")
-  private List<Flight> flights;
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "route")
+  private Set<Flight> flights;
 
   public Route() {}
 
@@ -72,7 +68,7 @@ public class Route {
     this.destination = destination;
   }
 
-  public List<Flight> getFlights() {
+  public Set<Flight> getFlights() {
     return flights;
   }
 

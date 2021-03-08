@@ -6,10 +6,6 @@ import com.smoothstack.utopia.api.flight.Flight;
 import java.util.List;
 import javax.persistence.*;
 
-@JsonIdentityInfo(
-  generator = ObjectIdGenerators.PropertyGenerator.class,
-  property = "id"
-)
 @Entity
 @Table
 public class Airplane {

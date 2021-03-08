@@ -6,10 +6,6 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 
-@JsonIdentityInfo(
-  generator = ObjectIdGenerators.PropertyGenerator.class,
-  property = "id"
-)
 @Entity
 @Table
 public class AirplaneType {
@@ -23,8 +19,8 @@ public class AirplaneType {
 
   @JsonIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "type")
-  private List<Airplane> airplanes;
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "type")
+  private Set<Airplane> airplanes;
 
   public AirplaneType() {}
 
@@ -37,7 +33,7 @@ public class AirplaneType {
     this.maxCapacity = maxCapacity;
   }
 
-  public List<Airplane> getAirplanes() {
+  public Set<Airplane> getAirplanes() {
     return airplanes;
   }
 
@@ -66,7 +62,6 @@ public class AirplaneType {
       ", maxCapacity=" +
       maxCapacity +
       ", airplanes=" +
-      airplanes +
       '}'
     );
   }

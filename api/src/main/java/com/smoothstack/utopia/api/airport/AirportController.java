@@ -1,14 +1,19 @@
 package com.smoothstack.utopia.api.airport;
 
+import com.smoothstack.utopia.api.CustomException;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
 @RestController
+@Validated
 @RequestMapping(path = "/airport")
 public class AirportController {
 
@@ -22,5 +27,31 @@ public class AirportController {
   @GetMapping
   public List<Airport> getAirports() {
     return airportService.getAirports();
+  }
+
+  @GetMapping(path = "{airportId}")
+  public Airport getAirport(@PathVariable("airportId") String airportId)
+    throws CustomException {
+    return airportService.getAirport(airportId);
+  }
+
+  @PostMapping
+  public void createAirport(@Valid @RequestBody AirportForm airportForm)
+    throws CustomException {
+    airportService.addNewAirport(airportForm);
+  }
+
+  @DeleteMapping(path = "{airportId}")
+  public void deleteAirport(@PathVariable("airportId") String airportId)
+    throws CustomException {
+    airportService.deleteAirport(airportId);
+  }
+
+  @PutMapping(path = "{airportId}")
+  public void updateAirport(
+    @PathVariable("airportId") String airportId,
+    @Valid @RequestBody AirportForm airportForm
+  ) throws CustomException {
+    airportService.updateAirport(airportId, airportForm);
   }
 }

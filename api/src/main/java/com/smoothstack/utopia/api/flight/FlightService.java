@@ -1,70 +1,117 @@
 package com.smoothstack.utopia.api.flight;
 
-import com.smoothstack.utopia.api.seat_type.SeatType;
-import com.smoothstack.utopia.api.seat_type.SeatTypeRepository;
-import java.sql.SQLOutput;
+import com.smoothstack.utopia.api.CustomException;
+import com.smoothstack.utopia.api.airplane.Airplane;
+import com.smoothstack.utopia.api.airplane.AirplaneRepository;
+import com.smoothstack.utopia.api.airport.Airport;
+import com.smoothstack.utopia.api.airport.AirportForm;
+import com.smoothstack.utopia.api.airport.AirportRepository;
+import com.smoothstack.utopia.api.route.Route;
+import com.smoothstack.utopia.api.route.RouteRepository;
 import java.util.List;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Transactional
 @Service
 public class FlightService {
 
-  private final SeatTypeRepository seatTypeRepository;
   private final FlightRepository flightRepository;
+  private final AirportRepository airportRepository;
+  private final RouteRepository routeRepository;
+  private final AirplaneRepository airplaneRepository;
 
   @Autowired
   public FlightService(
     FlightRepository flightRepository,
-    SeatTypeRepository seatTypeRepository
+    AirportRepository airportRepository,
+    RouteRepository routeRepository,
+    AirplaneRepository airplaneRepository
   ) {
     this.flightRepository = flightRepository;
-    this.seatTypeRepository = seatTypeRepository;
+    this.airportRepository = airportRepository;
+    this.routeRepository = routeRepository;
+    this.airplaneRepository = airplaneRepository;
   }
 
   public List<Flight> getFlights() {
-    List<Flight> flights = flightRepository.findAll();
-    flights.forEach(
-      flight -> System.out.println(flight.getRoute().getDestination())
-    );
-    return flights;
+    return flightRepository.findAll();
   }
 
-  public Flight getFlight(Long flightId) {
+  public Flight getFlight(Long flightId) throws CustomException {
     Optional<Flight> flightOptional = flightRepository.findById(flightId);
     if (flightOptional.isEmpty()) {
-      throw new IllegalStateException(
-        "flight with id " + flightId + " does not exist"
-      );
+      throw new CustomException("Flight " + flightId + " does not exist");
     }
     return flightOptional.get();
   }
 
-  public void updateFlight(
-    Long flightId,
-    String originAirport,
-    String originCity,
-    String destinationAirport,
-    String destinationCity,
-    String departureDate,
-    String departureTime
-  ) {
-    System.out.println("test");
+  public void deleteFlight(Long flightId) throws CustomException {
+    boolean exists = flightRepository.existsById(flightId);
+    if (!exists) {
+      throw new CustomException("Flight " + flightId + " does not exist");
+    }
+    flightRepository.deleteById(flightId);
   }
 
-  public void addSeats(Long flightId, AddSeatsInput addSeatsInput) {
-    Optional<Flight> flightOptional = flightRepository.findById(flightId);
-    if (flightOptional.isEmpty()) {
-      throw new IllegalStateException("invalid flight");
+  public void addNewFlight(FlightForm flightForm) throws CustomException {
+    if (
+      flightForm.getOriginAirport().equals(flightForm.getDestinationAirport())
+    ) {
+      throw new CustomException(
+        "Origin and destination airports cannot be the same"
+      );
     }
-    Optional<SeatType> seatTypeOptional = seatTypeRepository.findSeatTypeByClassification(
-      addSeatsInput.getSeatType()
+    if (flightForm.getDepartureTime().isAfter(flightForm.getArrivalTime())) {
+      throw new CustomException(
+        "Arrival time cannot come before departure time"
+      );
+    }
+    Optional<Airplane> airplaneOptional = airplaneRepository.findById(
+      flightForm.getAirplane()
     );
-    if (seatTypeOptional.isEmpty()) {
-      throw new IllegalStateException("invalid seat type");
+    if (airplaneOptional.isEmpty()) {
+      throw new CustomException(
+        "Airplane " + flightForm.getAirplane() + " does not exist"
+      );
     }
-    Flight flight = flightOptional.get();
-    SeatType seatType = seatTypeOptional.get();
+    Optional<Airport> originAirportOptional = airportRepository.findById(
+      flightForm.getOriginAirport()
+    );
+    Optional<Airport> destinationAirportOptional = airportRepository.findById(
+      flightForm.getDestinationAirport()
+    );
+    if (
+      originAirportOptional.isEmpty() || destinationAirportOptional.isEmpty()
+    ) {
+      throw new CustomException("Origin or destination airport(s) are invalid");
+    }
+    Optional<Route> routeOptional = routeRepository.findRouteByOriginAndDestination(
+      originAirportOptional.get(),
+      destinationAirportOptional.get()
+    );
+    Route route;
+    if (routeOptional.isPresent()) {
+      System.out.println("ROUTE ALREADY EXISTS");
+      route = routeOptional.get();
+    } else {
+      System.out.println("MAKING A NEW ROUTE");
+      route = new Route();
+      route.setOrigin(originAirportOptional.get());
+      route.setDestination(destinationAirportOptional.get());
+      routeRepository.save(route);
+      System.out.println("Route saved");
+    }
+    Flight flight = new Flight(
+      route,
+      airplaneOptional.get(),
+      flightForm.getDepartureTime(),
+      flightForm.getArrivalTime(),
+      flightForm.getReservedSeats(),
+      flightForm.getSeatPrice()
+    );
+    flightRepository.save(flight);
   }
 }

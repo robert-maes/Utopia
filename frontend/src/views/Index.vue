@@ -1,18 +1,22 @@
 <template>
-  <p>I am a(n)...</p>
   <ul>
-    <li><router-link to="/emp/main">Employee</router-link></li>
-    <li><router-link to="/admn/main">Administrator</router-link></li>
-    <li><router-link to="/trav/main">Traveler</router-link></li>
+    <li><router-link to="/flights">Flights</router-link></li>
+    <li><router-link to="/seats">Seats</router-link></li>
+    <li><router-link to="/tickets">Tickets</router-link></li>
+    <li><router-link to="/passengers">Passengers</router-link></li>
+    <li><router-link to="/airports">Airports</router-link></li>
+    <li><router-link to="/employees">Employees</router-link></li>
+    <li>
+      <router-link to="/">Over-ride Trip Cancellation</router-link>
+    </li>
   </ul>
 </template>
 
 <script>
-import { defineComponent, defineProps, reactive } from "vue";
-import HelloWorld from "../components/HelloWorld.vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  components: { HelloWorld },
+  components: {},
   setup() {
     return {};
   },

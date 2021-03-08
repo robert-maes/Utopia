@@ -1,9 +1,6 @@
 package com.smoothstack.utopia.api.flight;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.smoothstack.utopia.api.airplane.Airplane;
 import com.smoothstack.utopia.api.booking.Booking;
 import com.smoothstack.utopia.api.route.Route;
@@ -14,10 +11,6 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 
-@JsonIdentityInfo(
-  generator = ObjectIdGenerators.PropertyGenerator.class,
-  property = "id"
-)
 @Entity
 @Table
 public class Flight {
@@ -27,7 +20,8 @@ public class Flight {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @JsonManagedReference
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "route_id", nullable = false)
   private Route route;
 
