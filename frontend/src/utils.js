@@ -1,5 +1,7 @@
 export const BASE_URL = "http://localhost:8080/";
 
+// performs an http request of the given method
+// at the given api path with the given payload
 const request = async (path, method, payload) => {
   const response = await fetch(BASE_URL + path, {
     method,
@@ -18,24 +20,31 @@ const request = async (path, method, payload) => {
   }
 };
 
+// performs an http GET request
 export const get = async (path) => {
   return await request(path, "get");
 };
 
+// performs an http POST request
 export const post = async (path, payload) => {
   return await request(path, "post", payload);
 };
 
+// performs an http PUT request
 export const put = async (path, payload) => {
   return await request(path, "put", payload);
 };
 
+// performs an http DELETE request
 export const destroy = async (path) => {
   return await request(path, "delete");
 };
 
-//YYYY-mm-dd
-//24hr HH:MM
+/*
+Converts a dateString and timeString into a unix timestamp
+dateString [YYYY-mm-dd]
+timeString [HH:MM]
+*/
 export const dateTimeToUnixTimestamp = (dateString, timeString) => {
   if (!dateString) dateString = "";
   if (!timeString) timeString = "";
