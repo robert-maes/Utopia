@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
@@ -31,6 +32,7 @@ public class FlightController {
   }
 
   @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
   public void createFlight(@Valid @RequestBody FlightForm flightForm)
     throws CustomException {
     flightService.addNewFlight(flightForm);

@@ -1,5 +1,6 @@
 package com.smoothstack.utopia.api.flight;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.Instant;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -27,9 +28,11 @@ public class FlightForm {
   @Min(value = 0, message = "Airplane ID cannot be negative")
   private Long airplane;
 
+  @JsonFormat(shape = JsonFormat.Shape.NUMBER)
   @NotNull(message = "Departure time is required")
   private Instant departureTime;
 
+  @JsonFormat(shape = JsonFormat.Shape.NUMBER)
   @NotNull(message = "Arrival time is required")
   private Instant arrivalTime;
 

@@ -36,6 +36,7 @@ public class AirportController {
   }
 
   @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
   public void createAirport(@Valid @RequestBody AirportForm airportForm)
     throws CustomException {
     airportService.addNewAirport(airportForm);
