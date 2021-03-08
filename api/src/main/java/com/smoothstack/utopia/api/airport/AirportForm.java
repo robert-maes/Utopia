@@ -3,6 +3,10 @@ package com.smoothstack.utopia.api.airport;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * @author Rob Maes
+ * Mon Mar 8
+ */
 public class AirportForm {
 
   @NotNull(message = "IATA ID is required")

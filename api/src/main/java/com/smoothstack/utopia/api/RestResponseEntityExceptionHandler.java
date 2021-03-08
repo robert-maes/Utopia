@@ -18,10 +18,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * @author Rob Maes
+ * Mon Mar 8 2021
+ */
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler
   extends ResponseEntityExceptionHandler {
 
+  // This catches @Valid validation errors and returns them as a JSON list to the client
   @Override
   @ResponseStatus
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -46,6 +51,12 @@ public class RestResponseEntityExceptionHandler
     );
   }
 
+  // This catches CustomExceptions and returns the following JSON to the client
+  /*
+    {
+      "error": [ "$errorMessage" ]
+    }
+   */
   @ExceptionHandler(CustomException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ResponseBody

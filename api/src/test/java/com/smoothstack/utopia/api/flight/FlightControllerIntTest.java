@@ -17,8 +17,6 @@ import com.smoothstack.utopia.api.route.Route;
 import com.smoothstack.utopia.api.route.RouteRepository;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,8 +27,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
+/**
+ * @author Rob Maes
+ * Mon Mar 8 2021
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(
@@ -57,9 +58,15 @@ public class FlightControllerIntTest {
   @Autowired
   private AirplaneTypeRepository airplaneTypeRepository;
 
+  /**
+   * Serializes an Object to a JSON string
+   * @param obj The object to serialize
+   * @return A string containing the JSON representation of obj
+   */
   private static String asJsonString(final Object obj) {
     try {
       ObjectMapper objectMapper = new ObjectMapper();
+      // needed to prevent Instant serializing error
       objectMapper.registerModule(new JavaTimeModule());
       objectMapper.configure(
         SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS,
@@ -75,17 +82,27 @@ public class FlightControllerIntTest {
     }
   }
 
-  private AirplaneType type747 = new AirplaneType(467);
-  private AirplaneType type777 = new AirplaneType(301);
-  private Airport airportSFO = new Airport("SFO", "San Francisco");
-  private Airport airportLAX = new Airport("LAX", "Los Angeles");
-  private Airport airportIAH = new Airport("IAH", "Houston");
-  private Airport airportJFK = new Airport("JFK", "New York");
-  private Airplane airplane747 = new Airplane(type747);
-  private Airplane airplane777 = new Airplane(type777);
-  private Route routeLAX_JFK = new Route(airportLAX, airportJFK);
-  private Route routeSFO_IAH = new Route(airportSFO, airportIAH);
+  private final AirplaneType type747 = new AirplaneType(467);
+  private final AirplaneType type777 = new AirplaneType(301);
+  private final Airport airportSFO = new Airport("SFO", "San Francisco");
+  private final Airport airportLAX = new Airport("LAX", "Los Angeles");
+  private final Airport airportIAH = new Airport("IAH", "Houston");
+  private final Airport airportJFK = new Airport("JFK", "New York");
+  private final Airplane airplane747 = new Airplane(type747);
+  private final Airplane airplane777 = new Airplane(type777);
+  private final Route routeLAX_JFK = new Route(airportLAX, airportJFK);
+  private final Route routeSFO_IAH = new Route(airportSFO, airportIAH);
 
+  /**
+   * Creates a new flight and saves it to the in-mem DB
+   * @param route The route for the flight
+   * @param airplane The airplane for the flight
+   * @param departureTime The time the flight departs
+   * @param arrivalTime The time the flight arrives
+   * @param reservedSeats The number of seats that are reserved on the flight
+   * @param seatPrice The price for a seat on the flight
+   * @return
+   */
   private Flight createFlight(
     Route route,
     Airplane airplane,
@@ -106,6 +123,9 @@ public class FlightControllerIntTest {
     return flight;
   }
 
+  /**
+   * Before running the tests, populate the in-mem DB with some dummy data
+   */
   @BeforeAll
   private void saveAirportsAirplanesRoutes() {
     airportRepository.deleteAll();
@@ -117,12 +137,20 @@ public class FlightControllerIntTest {
     routeRepository.save(routeSFO_IAH);
   }
 
+  /**
+   * Before each test, wipe the flight table from the in-mem DB
+   */
   @BeforeEach
   public void wipeFlightDb() {
     flightRepository.deleteAll();
   }
 
   //GET
+
+  /**
+   * Tests that GET /flight returns a list of all flights
+   * @throws Exception
+   */
   @Test
   public void givenFlights_whenGetFlights_thenStatus200() throws Exception {
     createFlight(
@@ -143,6 +171,10 @@ public class FlightControllerIntTest {
       .andExpect(jsonPath("$[0].route.destination.iataId", is("JFK")));
   }
 
+  /**
+   * Tests that GET /flight/{flightId} returns the correct flight
+   * @throws Exception
+   */
   @Test
   public void givenExistingFlight_whenGetFlight_thenStatus200()
     throws Exception {
@@ -166,6 +198,10 @@ public class FlightControllerIntTest {
       .andExpect(jsonPath("$.route.destination.iataId", is("JFK")));
   }
 
+  /**
+   * Tests that GET /flight/{invalidId} returns an error
+   * @throws Exception
+   */
   @Test
   public void givenNonExistentFlight_whenGetFlight_thenStatus400()
     throws Exception {
@@ -175,6 +211,11 @@ public class FlightControllerIntTest {
   }
 
   //POST
+
+  /**
+   * Tests that POST /flight with valid properties creates a new flight
+   * @throws Exception
+   */
   @Test
   public void givenValidFlight_whenCreateFlight_thenStatus201()
     throws Exception {
@@ -196,6 +237,10 @@ public class FlightControllerIntTest {
       .andExpect(status().isCreated());
   }
 
+  /**
+   * Tests that trying to create a flight with the same airport for origin AND destination returns an error
+   * @throws Exception
+   */
   @Test
   public void givenFlightWithSameOriginAndDestination_whenCreateFlight_thenStatus400()
     throws Exception {
@@ -217,6 +262,11 @@ public class FlightControllerIntTest {
       .andExpect(status().isBadRequest());
   }
 
+  /**
+   * Tests that trying to create a flight with an arrival time that
+   * chronologically comes before departure time returns an error
+   * @throws Exception
+   */
   @Test
   public void givenFlightWithDepartureAfterArrival_whenCreateFlight_thenStatus400()
     throws Exception {
@@ -238,6 +288,10 @@ public class FlightControllerIntTest {
       .andExpect(status().isBadRequest());
   }
 
+  /**
+   * Tests that trying to create a flight with an airplane that does not exist returns an error
+   * @throws Exception
+   */
   @Test
   public void givenFlightWithNonExistentAirplane_whenCreateFlight_thenStatus400()
     throws Exception {
@@ -259,6 +313,10 @@ public class FlightControllerIntTest {
       .andExpect(status().isBadRequest());
   }
 
+  /**
+   * Tests that trying to create a flight with an airport that does not exist returns an error
+   * @throws Exception
+   */
   @Test
   public void givenFlightWithNonExistentAirport_whenCreateFlight_thenStatus400()
     throws Exception {
@@ -281,6 +339,11 @@ public class FlightControllerIntTest {
   }
 
   // DELETE
+
+  /**
+   * Tests that deleting an existing flight works
+   * @throws Exception
+   */
   @Test
   public void givenExistingFlight_whenDeleteFlight_thenStatus200()
     throws Exception {
@@ -300,6 +363,10 @@ public class FlightControllerIntTest {
       .andExpect(status().isOk());
   }
 
+  /**
+   * Tests that trying to delete a flight that does not exist returns an error
+   * @throws Exception
+   */
   @Test
   public void givenNonExistentFlight_whenDeleteFlight_thenStatus400()
     throws Exception {

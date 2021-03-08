@@ -6,6 +6,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * @author Rob Maes
+ * Mon Mar 8 2021
+ */
 public class FlightForm {
 
   @NotNull(message = "Origin airport is required")

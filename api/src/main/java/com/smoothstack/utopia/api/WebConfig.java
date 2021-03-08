@@ -8,14 +8,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * @author Rob Maes
+ * Mon Mar 8
+ */
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
+  // This prevents CORS errors for the JS frontend
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     final CorsConfiguration configuration = new CorsConfiguration();
@@ -38,6 +42,7 @@ public class WebConfig implements WebMvcConfigurer {
     return source;
   }
 
+  // This was added due to some annoying JSON serialization bugs and may or may not be needed now
   @Bean
   public Module hibernate5Module() {
     return new Hibernate5Module();

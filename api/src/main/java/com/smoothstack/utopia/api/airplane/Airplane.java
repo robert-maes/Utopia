@@ -6,6 +6,10 @@ import com.smoothstack.utopia.api.flight.Flight;
 import java.util.List;
 import javax.persistence.*;
 
+/**
+ * @author Rob Maes
+ * Mon Mar 8 2021
+ */
 @Entity
 @Table
 public class Airplane {

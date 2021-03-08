@@ -2,10 +2,13 @@ package com.smoothstack.utopia.api.airport;
 
 import com.fasterxml.jackson.annotation.*;
 import com.smoothstack.utopia.api.route.Route;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 
+/**
+ * @author Rob Maes
+ * Mon Mar 8 2021
+ */
 @Entity
 @Table
 public class Airport {

@@ -6,11 +6,14 @@ import com.smoothstack.utopia.api.booking.Booking;
 import com.smoothstack.utopia.api.route.Route;
 import com.smoothstack.utopia.api.seat.Seat;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 
+/**
+ * @author Rob Maes
+ * Mon Mar 8 2021
+ */
 @Entity
 @Table
 public class Flight {

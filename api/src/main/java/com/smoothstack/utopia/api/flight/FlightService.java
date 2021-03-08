@@ -4,7 +4,6 @@ import com.smoothstack.utopia.api.CustomException;
 import com.smoothstack.utopia.api.airplane.Airplane;
 import com.smoothstack.utopia.api.airplane.AirplaneRepository;
 import com.smoothstack.utopia.api.airport.Airport;
-import com.smoothstack.utopia.api.airport.AirportForm;
 import com.smoothstack.utopia.api.airport.AirportRepository;
 import com.smoothstack.utopia.api.route.Route;
 import com.smoothstack.utopia.api.route.RouteRepository;
@@ -14,6 +13,10 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author Rob Maes
+ * Mon Mar 8 2021
+ */
 @Transactional
 @Service
 public class FlightService {
@@ -36,27 +39,54 @@ public class FlightService {
     this.airplaneRepository = airplaneRepository;
   }
 
+  /**
+   * Gets a list of all flights
+   * @return A list of all flights
+   */
   public List<Flight> getFlights() {
     return flightRepository.findAll();
   }
 
+  /**
+   * Gets a specific flight
+   * @param flightId The Id of the flight to get
+   * @return The specified flight
+   * @throws CustomException
+   */
   public Flight getFlight(Long flightId) throws CustomException {
+    // check that the flight exists
+    // if it doesn't, return an error
     Optional<Flight> flightOptional = flightRepository.findById(flightId);
     if (flightOptional.isEmpty()) {
       throw new CustomException("Flight " + flightId + " does not exist");
     }
+    // else return the flight
     return flightOptional.get();
   }
 
+  /**
+   * Deletes a specific flight
+   * @param flightId The Id of the flight to delete
+   * @throws CustomException
+   */
   public void deleteFlight(Long flightId) throws CustomException {
+    // check that the flight exists
+    // if it doesn't, return an error
     boolean exists = flightRepository.existsById(flightId);
     if (!exists) {
       throw new CustomException("Flight " + flightId + " does not exist");
     }
+    // else delete the flight
     flightRepository.deleteById(flightId);
   }
 
+  /**
+   * Creates a new flight
+   * @param flightForm A POJO DTO for creating a new flight
+   * @throws CustomException
+   */
   public void addNewFlight(FlightForm flightForm) throws CustomException {
+    // if the origin and destination airports are the same, throw an error
     if (
       flightForm.getOriginAirport().equals(flightForm.getDestinationAirport())
     ) {
@@ -64,11 +94,13 @@ public class FlightService {
         "Origin and destination airports cannot be the same"
       );
     }
+    // if the arrival time comes before the departure time chronologically, throw an error
     if (flightForm.getDepartureTime().isAfter(flightForm.getArrivalTime())) {
       throw new CustomException(
         "Arrival time cannot come before departure time"
       );
     }
+    // if an airplane with the given ID does not exist, throw an error
     Optional<Airplane> airplaneOptional = airplaneRepository.findById(
       flightForm.getAirplane()
     );
@@ -77,6 +109,7 @@ public class FlightService {
         "Airplane " + flightForm.getAirplane() + " does not exist"
       );
     }
+    // if one or both of the given airports do not exist, throw an error
     Optional<Airport> originAirportOptional = airportRepository.findById(
       flightForm.getOriginAirport()
     );
@@ -88,22 +121,23 @@ public class FlightService {
     ) {
       throw new CustomException("Origin or destination airport(s) are invalid");
     }
+    // see if the flight route currently exists
     Optional<Route> routeOptional = routeRepository.findRouteByOriginAndDestination(
       originAirportOptional.get(),
       destinationAirportOptional.get()
     );
     Route route;
     if (routeOptional.isPresent()) {
-      System.out.println("ROUTE ALREADY EXISTS");
+      // if the route already exists, use it
       route = routeOptional.get();
     } else {
-      System.out.println("MAKING A NEW ROUTE");
+      // if the route doesn't exist, create it
       route = new Route();
       route.setOrigin(originAirportOptional.get());
       route.setDestination(destinationAirportOptional.get());
       routeRepository.save(route);
-      System.out.println("Route saved");
     }
+    // create the new flight
     Flight flight = new Flight(
       route,
       airplaneOptional.get(),
@@ -112,6 +146,7 @@ public class FlightService {
       flightForm.getReservedSeats(),
       flightForm.getSeatPrice()
     );
+    // saave the flight
     flightRepository.save(flight);
   }
 }
