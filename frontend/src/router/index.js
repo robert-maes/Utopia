@@ -1,36 +1,38 @@
 import { createRouter, createWebHistory } from "vue-router";
-import CreateAirport from "../views/airports/CreateAirport.vue";
-import ReadAirports from "../views/airports/ReadAirports.vue";
-import UpdateAirport from "../views/airports/UpdateAirport.vue";
-import CreateFlight from "../views/flights/CreateFlight.vue";
-import ReadFlights from "../views/flights/ReadFlights.vue";
 import Index from "../views/Index.vue";
+import NotFound from "../views/NotFound.vue";
+import ReadEmployees from "../views/employee/ReadEmployees.vue";
+import CreateEmployee from "../views/employee/CreateEmployee.vue";
+import UpdateEmployee from "../views/employee/UpdateEmployee.vue";
 
 const routes = [
+  // INDEX ROUTE
   {
     path: "/",
     component: Index,
   },
+  // EMPLOYEE ROUTES
   {
-    path: "/airports",
-    component: ReadAirports,
+    path: "/employee",
+    component: ReadEmployees,
   },
   {
-    path: "/airports/add",
-    component: CreateAirport,
+    path: "/employee/add",
+    component: CreateEmployee,
   },
   {
-    path: "/airports/:airportId/update",
-    component: UpdateAirport,
+    path: "/employee/:employeeId/update",
+    component: UpdateEmployee,
     props: true,
   },
+  // 404 ROUTES
   {
-    path: "/flights",
-    component: ReadFlights,
+    path: "/:pathMatch(.*)*",
+    component: NotFound,
   },
   {
-    path: "/flights/add",
-    component: CreateFlight,
+    path: "/:pathMatch(.*)",
+    component: NotFound,
   },
 ];
 

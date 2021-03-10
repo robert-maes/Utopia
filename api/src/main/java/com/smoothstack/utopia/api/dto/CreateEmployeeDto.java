@@ -16,7 +16,7 @@ public class CreateEmployeeDto {
   private String familyName;
 
   @NotBlank(message = "Username is required")
-  @Size(min = 8, max = 255, message = "Username be betweem 8 - 255 characters")
+  @Size(min = 8, max = 255, message = "Username be between 8 - 255 characters")
   @Pattern(
     regexp = "^[a-zA-Z0-9_]*$",
     message = "Username may only contain letters, numbers and underscores"
