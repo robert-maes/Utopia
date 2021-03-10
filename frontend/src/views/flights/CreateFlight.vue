@@ -95,7 +95,14 @@
           </tr>
           <tr>
             <td><label for="seatPrice">Seat Price:</label></td>
-            <td><input type="number" id="seatPrice" v-model="seatPrice" /></td>
+            <td>
+              <input
+                type="number"
+                step="0.01"
+                id="seatPrice"
+                v-model="seatPrice"
+              />
+            </td>
           </tr>
           <tr>
             <td></td>

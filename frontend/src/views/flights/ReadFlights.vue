@@ -32,9 +32,10 @@
           <td>{{ flight.reservedSeats }}</td>
           <td>{{ "$" + flight.seatPrice.toFixed(2) }}</td>
           <td>
-            <router-link :to="`/flights/${flight.id}/update`"
+            <!-- <router-link :to="`/flights/${flight.id}/update`"
               >Update</router-link
-            >
+            > -->
+            Update
           </td>
           <td>
             <a href="#" @click="destroyFlight(flight.id)">Delete</a>
