@@ -1,0 +1,24 @@
+package com.smoothstack.utopia.api.dto;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
+public class CreateTicketDto {
+
+  @NotNull(message = "Traveler ID is required")
+  @Positive(message = "Traveler ID must be a positive number")
+  private Long travelerId;
+
+  @NotNull(message = "Seat ID is required")
+  @Positive(message = "Seat ID must be a positive number")
+  private Long seatId;
+
+  public Long getTravelerId() {
+    return travelerId;
+  }
+
+  public Long getSeatId() {
+    return seatId;
+  }
+}
