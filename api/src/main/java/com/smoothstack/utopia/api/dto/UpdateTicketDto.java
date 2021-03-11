@@ -14,4 +14,8 @@ public class UpdateTicketDto {
   public String toString() {
     return "UpdateTicketDto{" + "isActive=" + isActive + '}';
   }
+
+  public void setActive(Boolean active) {
+    isActive = active;
+  }
 }

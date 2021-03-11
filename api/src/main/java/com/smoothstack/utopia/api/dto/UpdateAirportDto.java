@@ -28,4 +28,12 @@ public class UpdateAirportDto {
   public Optional<String> getCity() {
     return city;
   }
+
+  public void setId(Optional<String> id) {
+    this.id = id;
+  }
+
+  public void setCity(Optional<String> city) {
+    this.city = city;
+  }
 }

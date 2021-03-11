@@ -76,7 +76,7 @@ public class TravelerService {
     if (updateTravelerDto.getGivenName().isPresent()) {
       travelerToUpdate.setGivenName(updateTravelerDto.getGivenName().get());
     }
-    if (updateTravelerDto.getGivenName().isPresent()) {
+    if (updateTravelerDto.getGender().isPresent()) {
       travelerToUpdate.setGender(updateTravelerDto.getGender().get());
     }
     if (updateTravelerDto.getDateOfBirth().isPresent()) {

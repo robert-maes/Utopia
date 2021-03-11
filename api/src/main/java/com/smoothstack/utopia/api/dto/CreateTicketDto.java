@@ -21,4 +21,12 @@ public class CreateTicketDto {
   public Long getSeatId() {
     return seatId;
   }
+
+  public void setTravelerId(Long travelerId) {
+    this.travelerId = travelerId;
+  }
+
+  public void setSeatId(Long seatId) {
+    this.seatId = seatId;
+  }
 }

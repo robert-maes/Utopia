@@ -25,12 +25,8 @@ public class UpdateFlightDto {
     regexp = "[A-Z]{3}",
     message = "Destination airport ID can only contain capital letters"
   ) String> destinationAirportId = Optional.empty();
-  private Optional<@PastOrPresent(
-    message = "Departure time must be a time"
-  ) Instant> departureTime = Optional.empty();
-  private Optional<@PastOrPresent(
-    message = "Arrival time must be a time"
-  ) Instant> arrivalTime = Optional.empty();
+  private Optional<Instant> departureTime = Optional.empty();
+  private Optional<Instant> arrivalTime = Optional.empty();
   private Optional<@PositiveOrZero(
     message = "Seat price must be 0 or greater"
   ) Float> seatPrice = Optional.empty();
@@ -60,5 +56,29 @@ public class UpdateFlightDto {
 
   public Optional<Integer> getTotalSeats() {
     return totalSeats;
+  }
+
+  public void setOriginAirportId(Optional<String> originAirportId) {
+    this.originAirportId = originAirportId;
+  }
+
+  public void setDestinationAirportId(Optional<String> destinationAirportId) {
+    this.destinationAirportId = destinationAirportId;
+  }
+
+  public void setDepartureTime(Optional<Instant> departureTime) {
+    this.departureTime = departureTime;
+  }
+
+  public void setArrivalTime(Optional<Instant> arrivalTime) {
+    this.arrivalTime = arrivalTime;
+  }
+
+  public void setSeatPrice(Optional<Float> seatPrice) {
+    this.seatPrice = seatPrice;
+  }
+
+  public void setTotalSeats(Optional<Integer> totalSeats) {
+    this.totalSeats = totalSeats;
   }
 }

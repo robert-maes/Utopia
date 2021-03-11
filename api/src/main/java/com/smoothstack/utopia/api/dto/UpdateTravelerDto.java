@@ -55,4 +55,24 @@ public class UpdateTravelerDto {
   public Optional<String> getAddress() {
     return address;
   }
+
+  public void setGivenName(Optional<String> givenName) {
+    this.givenName = givenName;
+  }
+
+  public void setFamilyName(Optional<String> familyName) {
+    this.familyName = familyName;
+  }
+
+  public void setDateOfBirth(Optional<String> dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
+  }
+
+  public void setGender(Optional<String> gender) {
+    this.gender = gender;
+  }
+
+  public void setAddress(Optional<String> address) {
+    this.address = address;
+  }
 }

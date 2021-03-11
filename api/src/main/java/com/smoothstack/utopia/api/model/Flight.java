@@ -50,6 +50,22 @@ public class Flight {
     Airport destinationAirport,
     Instant departureTime,
     Instant arrivalTime,
+    Float seatPrice,
+    Integer totalSeats
+  ) {
+    this.originAirport = originAirport;
+    this.destinationAirport = destinationAirport;
+    this.departureTime = departureTime;
+    this.arrivalTime = arrivalTime;
+    this.seatPrice = seatPrice;
+    this.totalSeats = totalSeats;
+  }
+
+  public Flight(
+    Airport originAirport,
+    Airport destinationAirport,
+    Instant departureTime,
+    Instant arrivalTime,
     Float flightLengthInHours,
     Float seatPrice,
     Integer reservedSeats,

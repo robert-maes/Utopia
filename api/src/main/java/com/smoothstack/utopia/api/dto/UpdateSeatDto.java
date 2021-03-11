@@ -19,4 +19,12 @@ public class UpdateSeatDto {
   public Optional<SeatClass> getSeatClass() {
     return seatClass;
   }
+
+  public void setFlightId(Optional<Long> flightId) {
+    this.flightId = flightId;
+  }
+
+  public void setSeatClass(Optional<SeatClass> seatClass) {
+    this.seatClass = seatClass;
+  }
 }

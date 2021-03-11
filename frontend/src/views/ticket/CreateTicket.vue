@@ -112,6 +112,7 @@ export default defineComponent({
     const getSeats = async () => {
       try {
         seats.value = await get("seat");
+        seats.value = seats.value.filter((seat) => seat.ticket === null);
       } catch (e) {
         errorInitial.value = e;
         console.error(e);

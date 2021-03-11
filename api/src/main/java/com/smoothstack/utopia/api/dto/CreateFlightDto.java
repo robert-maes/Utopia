@@ -68,4 +68,28 @@ public class CreateFlightDto {
   public Integer getTotalSeats() {
     return totalSeats;
   }
+
+  public void setOriginAirportId(String originAirportId) {
+    this.originAirportId = originAirportId;
+  }
+
+  public void setDestinationAirportId(String destinationAirportId) {
+    this.destinationAirportId = destinationAirportId;
+  }
+
+  public void setDepartureTime(Instant departureTime) {
+    this.departureTime = departureTime;
+  }
+
+  public void setArrivalTime(Instant arrivalTime) {
+    this.arrivalTime = arrivalTime;
+  }
+
+  public void setSeatPrice(Float seatPrice) {
+    this.seatPrice = seatPrice;
+  }
+
+  public void setTotalSeats(Integer totalSeats) {
+    this.totalSeats = totalSeats;
+  }
 }

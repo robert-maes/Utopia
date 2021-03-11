@@ -29,4 +29,12 @@ public class CreateAirportDto {
   public String getCity() {
     return city;
   }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
+  }
 }

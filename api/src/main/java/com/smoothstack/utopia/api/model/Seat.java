@@ -28,6 +28,11 @@ public class Seat {
 
   public Seat() {}
 
+  public Seat(Flight flight, SeatClass seatClass) {
+    this.flight = flight;
+    this.seatClass = seatClass;
+  }
+
   public Seat(Flight flight, Ticket ticket, SeatClass seatClass) {
     this.flight = flight;
     this.ticket = ticket;

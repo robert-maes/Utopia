@@ -19,4 +19,12 @@ public class CreateSeatDto {
   public SeatClass getSeatClass() {
     return seatClass;
   }
+
+  public void setFlightId(Long flightId) {
+    this.flightId = flightId;
+  }
+
+  public void setSeatClass(SeatClass seatClass) {
+    this.seatClass = seatClass;
+  }
 }

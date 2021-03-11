@@ -39,6 +39,20 @@ public class Traveler {
     String familyName,
     LocalDate dateOfBirth,
     String gender,
+    String address
+  ) {
+    this.givenName = givenName;
+    this.familyName = familyName;
+    this.dateOfBirth = dateOfBirth;
+    this.gender = gender;
+    this.address = address;
+  }
+
+  public Traveler(
+    String givenName,
+    String familyName,
+    LocalDate dateOfBirth,
+    String gender,
     String address,
     List<Ticket> tickets
   ) {

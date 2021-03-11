@@ -49,4 +49,24 @@ public class CreateTravelerDto {
   public String getAddress() {
     return address;
   }
+
+  public void setGivenName(String givenName) {
+    this.givenName = givenName;
+  }
+
+  public void setFamilyName(String familyName) {
+    this.familyName = familyName;
+  }
+
+  public void setDateOfBirth(String dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
+  }
+
+  public void setGender(String gender) {
+    this.gender = gender;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
 }

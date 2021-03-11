@@ -49,4 +49,20 @@ public class UpdateEmployeeDto {
   public Optional<String> getPhoneNumber() {
     return phoneNumber;
   }
+
+  public void setGivenName(Optional<String> givenName) {
+    this.givenName = givenName;
+  }
+
+  public void setFamilyName(Optional<String> familyName) {
+    this.familyName = familyName;
+  }
+
+  public void setEmail(Optional<String> email) {
+    this.email = email;
+  }
+
+  public void setPhoneNumber(Optional<String> phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
 }
