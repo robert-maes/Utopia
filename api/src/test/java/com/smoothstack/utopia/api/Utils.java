@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 public class Utils {
 
   private static final ObjectMapper objectMapper = new ObjectMapper();

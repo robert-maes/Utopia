@@ -23,6 +23,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(

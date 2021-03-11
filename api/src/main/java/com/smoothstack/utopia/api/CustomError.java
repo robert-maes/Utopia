@@ -1,5 +1,9 @@
 package com.smoothstack.utopia.api;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 public class CustomError {
 
   private String message;

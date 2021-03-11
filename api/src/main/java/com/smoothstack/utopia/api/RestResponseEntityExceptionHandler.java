@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler
   extends ResponseEntityExceptionHandler {

@@ -5,6 +5,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 public class CreateEmployeeDto {
 
   @NotBlank(message = "First name is required")

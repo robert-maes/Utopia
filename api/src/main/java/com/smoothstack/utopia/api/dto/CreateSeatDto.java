@@ -4,6 +4,10 @@ import com.smoothstack.utopia.api.SeatClass;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 public class CreateSeatDto {
 
   @NotNull(message = "Flight ID is required")

@@ -1,5 +1,9 @@
 package com.smoothstack.utopia.api.dto;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 public class UpdateTicketDto {
 
   private Boolean isActive;

@@ -3,6 +3,10 @@ package com.smoothstack.utopia.api.dto;
 import java.time.Instant;
 import javax.validation.constraints.*;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 public class CreateFlightDto {
 
   @NotBlank(message = "Origin airport ID is required")

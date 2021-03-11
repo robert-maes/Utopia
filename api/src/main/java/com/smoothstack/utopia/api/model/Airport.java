@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import javax.persistence.*;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 @Entity
 @Table
 public class Airport {

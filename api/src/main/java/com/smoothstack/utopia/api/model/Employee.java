@@ -2,6 +2,10 @@ package com.smoothstack.utopia.api.model;
 
 import javax.persistence.*;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 @Entity
 @Table
 public class Employee {

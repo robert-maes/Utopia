@@ -3,6 +3,10 @@ package com.smoothstack.utopia.api.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 public class CreateTicketDto {
 
   @NotNull(message = "Traveler ID is required")

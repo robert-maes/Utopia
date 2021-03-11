@@ -4,6 +4,10 @@ import java.util.Optional;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 public class UpdateTravelerDto {
 
   private Optional<@Size(

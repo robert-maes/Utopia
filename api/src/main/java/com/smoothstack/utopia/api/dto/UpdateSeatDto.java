@@ -4,6 +4,10 @@ import com.smoothstack.utopia.api.SeatClass;
 import java.util.Optional;
 import javax.validation.constraints.Positive;
 
+/**
+ * @author Rob Maes
+ * Mar 11 2021
+ */
 public class UpdateSeatDto {
 
   private Optional<@Positive(
