@@ -1,16 +1,13 @@
 package com.smoothstack.utopia.api.controller;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.smoothstack.utopia.api.Utils;
 import com.smoothstack.utopia.api.dao.TravelerDao;
-import com.smoothstack.utopia.api.dao.TravelerDao;
 import com.smoothstack.utopia.api.dto.CreateTravelerDto;
 import com.smoothstack.utopia.api.dto.UpdateTravelerDto;
-import com.smoothstack.utopia.api.model.Traveler;
 import com.smoothstack.utopia.api.model.Traveler;
 import java.time.LocalDate;
 import java.time.Month;

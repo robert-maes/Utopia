@@ -1,18 +1,15 @@
 package com.smoothstack.utopia.api.controller;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.smoothstack.utopia.api.SeatClass;
 import com.smoothstack.utopia.api.Utils;
 import com.smoothstack.utopia.api.dao.*;
-import com.smoothstack.utopia.api.dao.TicketDao;
 import com.smoothstack.utopia.api.dto.CreateTicketDto;
 import com.smoothstack.utopia.api.dto.UpdateTicketDto;
 import com.smoothstack.utopia.api.model.*;
-import com.smoothstack.utopia.api.model.Ticket;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;

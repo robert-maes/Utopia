@@ -1,23 +1,22 @@
 package com.smoothstack.utopia.api.controller;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.smoothstack.utopia.api.SeatClass;
 import com.smoothstack.utopia.api.Utils;
-import com.smoothstack.utopia.api.dao.*;
+import com.smoothstack.utopia.api.dao.AirportDao;
+import com.smoothstack.utopia.api.dao.FlightDao;
 import com.smoothstack.utopia.api.dao.SeatDao;
+import com.smoothstack.utopia.api.dao.TicketDao;
 import com.smoothstack.utopia.api.dto.CreateSeatDto;
 import com.smoothstack.utopia.api.dto.UpdateSeatDto;
-import com.smoothstack.utopia.api.model.*;
+import com.smoothstack.utopia.api.model.Airport;
+import com.smoothstack.utopia.api.model.Flight;
 import com.smoothstack.utopia.api.model.Seat;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

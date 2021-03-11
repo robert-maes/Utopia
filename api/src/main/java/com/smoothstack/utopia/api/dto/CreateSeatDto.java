@@ -1,7 +1,8 @@
 package com.smoothstack.utopia.api.dto;
 
 import com.smoothstack.utopia.api.SeatClass;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 public class CreateSeatDto {
 

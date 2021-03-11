@@ -1,8 +1,6 @@
 package com.smoothstack.utopia.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.smoothstack.utopia.api.SeatClass;
 import javax.persistence.*;
 

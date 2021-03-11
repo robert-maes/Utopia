@@ -2,7 +2,6 @@ package com.smoothstack.utopia.api.dto;
 
 import com.smoothstack.utopia.api.SeatClass;
 import java.util.Optional;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
 public class UpdateSeatDto {
