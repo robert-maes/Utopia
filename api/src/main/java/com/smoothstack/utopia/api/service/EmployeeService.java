@@ -31,26 +31,33 @@ public class EmployeeService {
   }
 
   public Employee getEmployee(Long employeeId) {
+    // try to find the requested employee
     Optional<Employee> employeeOptional = employeeDao.findById(employeeId);
+    // if the employee does not exist, throw a 404
     if (employeeOptional.isEmpty()) {
       throw new EmployeeNotFoundException();
     }
+    // otherwise, return the employee
     return employeeOptional.get();
   }
 
   public void createEmployee(CreateEmployeeDto createEmployeeDto) {
+    // try to find an existing employee with the new employees username
     Optional<Employee> employeeOptional = employeeDao.findEmployeeByUsername(
       createEmployeeDto.getUsername()
     );
+    // if an employee with this username already exists, throw an error
     if (employeeOptional.isPresent()) {
       throw new DuplicateUsernameException();
     }
+    // create the new employee
     Employee employee = new Employee();
     employee.setEmail(createEmployeeDto.getEmail());
     employee.setFamilyName(createEmployeeDto.getFamilyName());
     employee.setGivenName(createEmployeeDto.getGivenName());
     employee.setUsername(createEmployeeDto.getUsername());
     employee.setPhoneNumber(createEmployeeDto.getPhoneNumber());
+    // save the employee
     employeeDao.save(employee);
   }
 
@@ -59,12 +66,15 @@ public class EmployeeService {
     Long employeeId,
     UpdateEmployeeDto updateEmployeeDto
   ) {
+    // try to find the employee to update
     Optional<Employee> employeeToUpdateOptional = employeeDao.findById(
       employeeId
     );
+    // if the employee does not exist, throw an error
     if (employeeToUpdateOptional.isEmpty()) {
       throw new EmployeeNotFoundException();
     }
+    // otherwise, update the specified fields
     Employee employeeToUpdate = employeeToUpdateOptional.get();
     if (updateEmployeeDto.getEmail().isPresent()) {
       employeeToUpdate.setEmail((updateEmployeeDto.getEmail().get()));
@@ -78,14 +88,18 @@ public class EmployeeService {
     if (updateEmployeeDto.getPhoneNumber().isPresent()) {
       employeeToUpdate.setPhoneNumber(updateEmployeeDto.getPhoneNumber().get());
     }
+    // save the updated employee
     employeeDao.save(employeeToUpdate);
   }
 
   public void deleteEmployee(Long employeeId) {
+    // try to find the employee to delete
     Optional<Employee> employeeOptional = employeeDao.findById(employeeId);
+    // if the employee does not exist, throw a 404
     if (employeeOptional.isEmpty()) {
       throw new EmployeeNotFoundException();
     }
+    // otherwise, delete the employee
     employeeDao.delete(employeeOptional.get());
   }
 }

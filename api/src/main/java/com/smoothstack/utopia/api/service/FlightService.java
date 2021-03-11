@@ -46,10 +46,13 @@ public class FlightService {
   }
 
   public Flight getFlight(Long flightId) {
+    // try to find the requested flight
     Optional<Flight> flightOptional = flightDao.findById(flightId);
+    // if the requested flight does not exist, throw a 404
     if (flightOptional.isEmpty()) {
       throw new FlightNotFoundException();
     }
+    // otherwise, return the requested flight
     return flightOptional.get();
   }
 
@@ -60,24 +63,31 @@ public class FlightService {
     Instant arrivalTime = createFlightDto.getArrivalTime();
     Float seatPrice = createFlightDto.getSeatPrice();
     Integer totalSeats = createFlightDto.getTotalSeats();
+    // if the arriving airport is the same as the departing airport, throw an error
     if (originAirportId.equals(destinationAirportId)) {
       throw new SameOriginDestinationException();
     }
+    // try to find the specified origin airport
     Optional<Airport> originAirportOptional = airportDao.findAirportByIataId(
       originAirportId
     );
+    // if the origin airport does not exist, throw a 404
     if (originAirportOptional.isEmpty()) {
       throw new AirportNotFoundException();
     }
+    // try to find the destination airport
     Optional<Airport> destinationAirportOptional = airportDao.findAirportByIataId(
       destinationAirportId
     );
+    // if the destination airport does not exist, throw a 404
     if (destinationAirportOptional.isEmpty()) {
       throw new AirportNotFoundException();
     }
+    // if the departure time comes after the arrival time, throw an error, does not make sense
     if (departureTime.isAfter(arrivalTime)) {
       throw new InvalidDepartureArrivalTimeException();
     }
+    // create a new flight
     Flight flight = new Flight();
     flight.setOriginAirport(originAirportOptional.get());
     flight.setDestinationAirport(destinationAirportOptional.get());
@@ -85,12 +95,15 @@ public class FlightService {
     flight.setDepartureTime(departureTime);
     flight.setSeatPrice(seatPrice);
     flight.setTotalSeats(totalSeats);
+    // save the new flight
     flightDao.save(flight);
   }
 
   @Transactional
   public void updateFlight(Long flightId, UpdateFlightDto updateFlightDto) {
+    // try to find the flight to update
     Optional<Flight> flightToUpdateOptional = flightDao.findById(flightId);
+    // if the flight does not exist, throw a 404
     if (flightToUpdateOptional.isEmpty()) {
       throw new FlightNotFoundException();
     }
@@ -101,29 +114,37 @@ public class FlightService {
     if (updateFlightDto.getDepartureTime().isPresent()) {
       flightToUpdate.setDepartureTime(updateFlightDto.getDepartureTime().get());
     }
+    // if the updated flight departure time comes after the arrival time, throw an error, makes no sense
     if (
       flightToUpdate.getDepartureTime().isAfter(flightToUpdate.getArrivalTime())
     ) {
       throw new InvalidDepartureArrivalTimeException();
     }
+    // if updating the origin airport
     if (updateFlightDto.getOriginAirportId().isPresent()) {
+      // try to find the new origin airport
       Optional<Airport> originAirportOptional = airportDao.findAirportByIataId(
         updateFlightDto.getOriginAirportId().get()
       );
+      // if the new origin airport does not exist, throw a 404
       if (originAirportOptional.isEmpty()) {
         throw new AirportNotFoundException();
       }
       flightToUpdate.setOriginAirport(originAirportOptional.get());
     }
+    // if updating the destination airport
     if (updateFlightDto.getDestinationAirportId().isPresent()) {
+      // try to find the new destination airport
       Optional<Airport> destinationAirportOptional = airportDao.findAirportByIataId(
         updateFlightDto.getDestinationAirportId().get()
       );
+      // if the new destination airport does not exist, throw a 404
       if (destinationAirportOptional.isEmpty()) {
         throw new AirportNotFoundException();
       }
       flightToUpdate.setDestinationAirport(destinationAirportOptional.get());
     }
+    // if the new origin airport is the same as the departure airport, throw an error
     if (
       flightToUpdate
         .getOriginAirport()
@@ -134,7 +155,10 @@ public class FlightService {
     if (updateFlightDto.getSeatPrice().isPresent()) {
       flightToUpdate.setSeatPrice(updateFlightDto.getSeatPrice().get());
     }
+    // if updating total seats
     if (updateFlightDto.getTotalSeats().isPresent()) {
+      // if shrinking total seats to below currently reserved seats, throw an error
+      // must remove the reserved seats first
       if (
         updateFlightDto.getTotalSeats().get() <
         flightToUpdate.getReservedSeats()
@@ -143,28 +167,36 @@ public class FlightService {
       }
       flightToUpdate.setTotalSeats(updateFlightDto.getTotalSeats().get());
     }
+    // save the updated flight
     flightDao.save(flightToUpdate);
   }
 
   @Transactional
   public void deleteFlight(Long flightId) {
+    // try to find the flight to delete
     Optional<Flight> flightOptional = flightDao.findById(flightId);
+    // if the flight does not exist, throw a 404
     if (flightOptional.isEmpty()) {
       throw new FlightNotFoundException();
     }
     Flight flight = flightOptional.get();
+    // if the flight has seats
     if (!flight.getSeats().isEmpty()) {
+      // loop through each seat
       flight
         .getSeats()
         .forEach(
           seat -> {
+            // if the seat has a ticket, delete the ticket
             if (seat.getTicket() != null) {
               ticketDao.delete(seat.getTicket());
             }
+            // delete the seat
             seatDao.delete(seat);
           }
         );
     }
+    // delete the flight
     flightDao.delete(flight);
   }
 }
