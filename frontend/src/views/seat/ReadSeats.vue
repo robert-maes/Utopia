@@ -70,7 +70,11 @@ export default defineComponent({
 
     const destroySeat = async (seatId) => {
       try {
-        if (confirm("Are you sure you want to delete this seat?")) {
+        if (
+          confirm(
+            "Are you sure you want to delete this seat? THIS WILL DELETE ANY ASSOCIATED TICKETS."
+          )
+        ) {
           await destroy(`seat/${seatId}`);
           seats.value = seats.value.filter((seat) => seat.id !== seatId);
         }

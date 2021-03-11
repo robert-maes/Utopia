@@ -74,7 +74,11 @@ export default defineComponent({
 
     const destroyTraveler = async (travelerId) => {
       try {
-        if (confirm("Are you sure you want to delete this traveler?")) {
+        if (
+          confirm(
+            "Are you sure you want to delete this traveler? THIS WILL DELETE ALL ASSOCIATED TICKETS."
+          )
+        ) {
           await destroy(`traveler/${travelerId}`);
           travelers.value = travelers.value.filter(
             (traveler) => traveler.id !== travelerId

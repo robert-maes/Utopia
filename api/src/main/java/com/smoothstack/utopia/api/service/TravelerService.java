@@ -1,5 +1,6 @@
 package com.smoothstack.utopia.api.service;
 
+import com.smoothstack.utopia.api.dao.TicketDao;
 import com.smoothstack.utopia.api.dao.TravelerDao;
 import com.smoothstack.utopia.api.dto.CreateTravelerDto;
 import com.smoothstack.utopia.api.dto.UpdateTravelerDto;
@@ -17,10 +18,12 @@ import org.springframework.stereotype.Service;
 public class TravelerService {
 
   private final TravelerDao travelerDao;
+  private final TicketDao ticketDao;
 
   @Autowired
-  public TravelerService(TravelerDao travelerDao) {
+  public TravelerService(TravelerDao travelerDao, TicketDao ticketDao) {
     this.travelerDao = travelerDao;
+    this.ticketDao = ticketDao;
   }
 
   public List<Traveler> getAllTravelers() {
@@ -89,11 +92,16 @@ public class TravelerService {
     travelerDao.save(travelerToUpdate);
   }
 
+  @Transactional
   public void deleteTraveler(Long travelerId) {
     Optional<Traveler> travelerOptional = travelerDao.findById(travelerId);
     if (travelerOptional.isEmpty()) {
       throw new TravelerNotFoundException();
     }
-    travelerDao.delete(travelerOptional.get());
+    Traveler traveler = travelerOptional.get();
+    if (!traveler.getTickets().isEmpty()) {
+      traveler.getTickets().forEach(ticketDao::delete);
+    }
+    travelerDao.delete(traveler);
   }
 }

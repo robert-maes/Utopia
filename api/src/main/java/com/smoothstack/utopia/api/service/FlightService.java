@@ -2,6 +2,8 @@ package com.smoothstack.utopia.api.service;
 
 import com.smoothstack.utopia.api.dao.AirportDao;
 import com.smoothstack.utopia.api.dao.FlightDao;
+import com.smoothstack.utopia.api.dao.SeatDao;
+import com.smoothstack.utopia.api.dao.TicketDao;
 import com.smoothstack.utopia.api.dto.CreateFlightDto;
 import com.smoothstack.utopia.api.dto.UpdateFlightDto;
 import com.smoothstack.utopia.api.exception.*;
@@ -19,11 +21,20 @@ public class FlightService {
 
   private final FlightDao flightDao;
   private final AirportDao airportDao;
+  private final SeatDao seatDao;
+  private final TicketDao ticketDao;
 
   @Autowired
-  public FlightService(FlightDao flightDao, AirportDao airportDao) {
+  public FlightService(
+    FlightDao flightDao,
+    AirportDao airportDao,
+    SeatDao seatDao,
+    TicketDao ticketDao
+  ) {
     this.flightDao = flightDao;
     this.airportDao = airportDao;
+    this.seatDao = seatDao;
+    this.ticketDao = ticketDao;
   }
 
   public List<Flight> getAllFlights() {
@@ -131,11 +142,25 @@ public class FlightService {
     flightDao.save(flightToUpdate);
   }
 
+  @Transactional
   public void deleteFlight(Long flightId) {
     Optional<Flight> flightOptional = flightDao.findById(flightId);
     if (flightOptional.isEmpty()) {
       throw new FlightNotFoundException();
     }
-    flightDao.delete(flightOptional.get());
+    Flight flight = flightOptional.get();
+    if (!flight.getSeats().isEmpty()) {
+      flight
+        .getSeats()
+        .forEach(
+          seat -> {
+            if (seat.getTicket() != null) {
+              ticketDao.delete(seat.getTicket());
+            }
+            seatDao.delete(seat);
+          }
+        );
+    }
+    flightDao.delete(flight);
   }
 }

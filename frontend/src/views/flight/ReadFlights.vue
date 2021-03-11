@@ -92,7 +92,11 @@ export default defineComponent({
 
     const destroyFlight = async (flightId) => {
       try {
-        if (confirm("Are you sure you want to delete this flight?")) {
+        if (
+          confirm(
+            "Are you sure you want to delete this flight? THIS WILL DELETE ALL ASSOCIATED SEATS AND TICKETS."
+          )
+        ) {
           await destroy(`flight/${flightId}`);
           flights.value = flights.value.filter(
             (flight) => flight.id !== flightId

@@ -2,6 +2,7 @@ package com.smoothstack.utopia.api.service;
 
 import com.smoothstack.utopia.api.dao.FlightDao;
 import com.smoothstack.utopia.api.dao.SeatDao;
+import com.smoothstack.utopia.api.dao.TicketDao;
 import com.smoothstack.utopia.api.dto.CreateSeatDto;
 import com.smoothstack.utopia.api.dto.UpdateSeatDto;
 import com.smoothstack.utopia.api.exception.FlightFullException;
@@ -20,11 +21,17 @@ public class SeatService {
 
   private final SeatDao seatDao;
   private final FlightDao flightDao;
+  private final TicketDao ticketDao;
 
   @Autowired
-  public SeatService(SeatDao seatDao, FlightDao flightDao) {
+  public SeatService(
+    SeatDao seatDao,
+    FlightDao flightDao,
+    TicketDao ticketDao
+  ) {
     this.seatDao = seatDao;
     this.flightDao = flightDao;
+    this.ticketDao = ticketDao;
   }
 
   public List<Seat> getAllSeats() {
@@ -78,11 +85,16 @@ public class SeatService {
     seatDao.save(seatToUpdate);
   }
 
+  @Transactional
   public void deleteSeat(Long seatId) {
     Optional<Seat> seatOptional = seatDao.findById(seatId);
     if (seatOptional.isEmpty()) {
       throw new SeatNotFoundException();
     }
-    seatDao.delete(seatOptional.get());
+    Seat seat = seatOptional.get();
+    if (seat.getTicket() != null) {
+      ticketDao.delete(seat.getTicket());
+    }
+    seatDao.delete(seat);
   }
 }

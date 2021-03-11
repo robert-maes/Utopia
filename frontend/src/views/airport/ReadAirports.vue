@@ -66,7 +66,11 @@ export default defineComponent({
 
     const destroyAirport = async (airportId) => {
       try {
-        if (confirm("Are you sure you want to delete this airport?")) {
+        if (
+          confirm(
+            "Are you sure you want to delete this airport? THIS WILL DELETE ALL ASSOCIATED FLIGHTS, SEATS AND TICKETS."
+          )
+        ) {
           await destroy(`airport/${airportId}`);
           airports.value = airports.value.filter(
             (airport) => airport.iataId !== airportId
