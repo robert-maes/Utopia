@@ -4,10 +4,14 @@ import javax.validation.constraints.NotNull;
 
 public class UpdateTicketDto {
 
-  @NotNull(message = "Ticket active status is required")
   private Boolean isActive;
 
-  public Boolean getActive() {
+  public Boolean getIsActive() {
     return isActive;
+  }
+
+  @Override
+  public String toString() {
+    return "UpdateTicketDto{" + "isActive=" + isActive + '}';
   }
 }

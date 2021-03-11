@@ -80,7 +80,7 @@ public class TicketService {
       throw new TicketNotFoundException();
     }
     Ticket ticketToUpdate = ticketToUpdateOptional.get();
-    ticketToUpdate.setActive(updateTicketDto.getActive());
+    ticketToUpdate.setActive(updateTicketDto.getIsActive());
     ticketDao.save(ticketToUpdate);
   }
 

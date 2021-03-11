@@ -64,11 +64,13 @@ public class AirportService {
     Airport airportToUpdate = airportToUpdateOptional.get();
     if (updateAirportDto.getId().isPresent()) {
       String newAirportId = updateAirportDto.getId().get();
-      Optional<Airport> newIdAirportOptional = airportDao.findAirportByIataId(
-        newAirportId
-      );
-      if (newIdAirportOptional.isPresent()) {
-        throw new DuplicateAirportException();
+      if (!newAirportId.equals(airportToUpdate.getIataId())) {
+        Optional<Airport> newIdAirportOptional = airportDao.findAirportByIataId(
+          newAirportId
+        );
+        if (newIdAirportOptional.isPresent()) {
+          throw new DuplicateAirportException();
+        }
       }
       airportToUpdate.setIataId(newAirportId);
     }

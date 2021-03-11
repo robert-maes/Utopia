@@ -45,16 +45,45 @@ Converts a dateString and timeString into a unix timestamp
 dateString [YYYY-mm-dd]
 timeString [HH:MM]
 */
-export const dateTimeToUnixTimestamp = (dateString, timeString) => {
-  if (!dateString) dateString = "";
-  if (!timeString) timeString = "";
-  const dateParts = dateString.split("-");
-  const dateObject = new Date();
-  dateObject.setFullYear(dateParts[0]);
-  dateObject.setMonth(dateParts[1] - 1);
-  dateObject.setDate(dateParts[2]);
-  const timeParts = timeString.split(":");
-  dateObject.setHours(timeParts[0]);
-  dateObject.setMinutes(timeParts[1]);
-  return Math.floor(dateObject.getTime() / 1000);
+// export const dateTimeToUnixTimestamp = (dateString, timeString) => {
+//   if (!dateString) dateString = "";
+//   if (!timeString) timeString = "";
+//   const dateParts = dateString.split("-");
+//   const dateObject = new Date();
+//   dateObject.setFullYear(dateParts[0]);
+//   dateObject.setMonth(dateParts[1] - 1);
+//   dateObject.setDate(dateParts[2]);
+//   const timeParts = timeString.split(":");
+//   dateObject.setHours(timeParts[0]);
+//   dateObject.setMinutes(timeParts[1]);
+//   return Math.floor(dateObject.getTime() / 1000);
+// };
+
+export const instantToDatetimeLocalValue = (instant) => {
+  const date = new Date(instant);
+  const localToISO = new Date(
+    date.getTime() - date.getTimezoneOffset() * 60000
+  );
+  const isoString = localToISO.toISOString();
+  return isoString.substring(0, isoString.length - 8);
+};
+
+export const instantToLocalDateTimeString = (instant) => {
+  const date = new Date(instant);
+  return date.toLocaleString("en-US");
+};
+
+export const datetimeLocalValueToInstant = (dtLocalVal) => {
+  return new Date(dtLocalVal).toISOString();
+};
+
+export const roundToTwoDecimals = (float) => {
+  return Math.round(float * 100) / 100;
+};
+
+export const formatMoney = (float) => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(float);
 };

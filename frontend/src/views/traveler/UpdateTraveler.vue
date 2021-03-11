@@ -2,10 +2,10 @@
   <div v-if="loadingInitial">Loading...</div>
   <div v-else>
     <div v-if="errorInitial" class="alert alert-warning">
-      Oops! Unable to load employee with ID {{ employeeId }}
+      Oops! Unable to load traveler with ID {{ travelerId }}
     </div>
     <div v-else>
-      <h3 class="mt-1">Update Employee</h3>
+      <h3 class="mt-1">Update Traveler</h3>
       <div v-if="errors" class="alert alert-danger">
         <p v-if="errors.message">{{ errors.message }}</p>
         <ul v-else>
@@ -14,7 +14,7 @@
           </li>
         </ul>
       </div>
-      <form v-on:submit.prevent="updateEmployee">
+      <form v-on:submit.prevent="updateTraveler">
         <table>
           <tr>
             <td>
@@ -23,6 +23,7 @@
             <td>
               <input
                 type="text"
+                required
                 maxlength="255"
                 id="givenName"
                 v-model="givenName"
@@ -37,6 +38,7 @@
             <td>
               <input
                 type="text"
+                required
                 maxlength="255"
                 id="familyName"
                 v-model="familyName"
@@ -45,27 +47,41 @@
             </td>
           </tr>
           <tr>
-            <td><label for="email" class="form-label">Email:</label></td>
+            <td>
+              <label for="dateOfBirth" class="form-label">Birthday:</label>
+            </td>
             <td>
               <input
-                type="email"
-                maxlength="255"
-                id="email"
-                v-model="email"
+                type="date"
+                required
+                id="dateOfBirth"
+                v-model="dateOfBirth"
                 class="form-control"
               />
             </td>
           </tr>
           <tr>
-            <td>
-              <label for="phoneNumber" class="form-label">Phone Number:</label>
-            </td>
+            <td><label for="gender" class="form-label">Gender:</label></td>
             <td>
               <input
-                type="tel"
-                pattern="^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$"
-                id="phoneNumber"
-                v-model="phoneNumber"
+                type="text"
+                required
+                maxlength="255"
+                id="gender"
+                v-model="gender"
+                class="form-control"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td><label for="address" class="form-label">Address:</label></td>
+            <td>
+              <input
+                type="text"
+                required
+                maxlength="255"
+                id="address"
+                v-model="address"
                 class="form-control"
               />
             </td>
@@ -85,7 +101,7 @@
       </form>
     </div>
   </div>
-  <router-link to="/employee" tag="button" class="btn btn-secondary mt-1"
+  <router-link to="/traveler" tag="button" class="btn btn-secondary mt-1"
     >Cancel</router-link
   >
 </template>
@@ -98,32 +114,34 @@ import { useRouter } from "vue-router";
 export default defineComponent({
   components: {},
   props: {
-    employeeId: String,
+    travelerId: String,
   },
   setup(props) {
     const loadingInitial = ref(true);
     const errorInitial = ref(null);
-    const employee = ref(null);
+    const traveler = ref(null);
     const loading = ref(false);
     const errors = ref(null);
     const router = useRouter();
     const givenName = ref("");
     const familyName = ref("");
-    const email = ref("");
-    const phoneNumber = ref("");
+    const dateOfBirth = ref("");
+    const gender = ref("");
+    const address = ref("");
 
-    const updateEmployee = async () => {
+    const updateTraveler = async () => {
       loading.value = true;
       errors.value = null;
       try {
-        await put(`employee/${props.employeeId}`, {
+        await put(`traveler/${props.travelerId}`, {
           givenName: givenName.value,
           familyName: familyName.value,
-          email: email.value,
-          phoneNumber: phoneNumber.value,
+          dateOfBirth: dateOfBirth.value,
+          gender: gender.value,
+          address: address.value,
         });
         await router.push({
-          path: "/employee",
+          path: "/traveler",
         });
       } catch (e) {
         errors.value = JSON.parse(e.message);
@@ -133,13 +151,14 @@ export default defineComponent({
       }
     };
 
-    const getEmployee = async () => {
+    const getTraveler = async () => {
       try {
-        employee.value = await get(`employee/${props.employeeId}`);
-        givenName.value = employee.value.givenName;
-        familyName.value = employee.value.familyName;
-        email.value = employee.value.email;
-        phoneNumber.value = employee.value.phoneNumber;
+        traveler.value = await get(`traveler/${props.travelerId}`);
+        givenName.value = traveler.value.givenName;
+        familyName.value = traveler.value.familyName;
+        dateOfBirth.value = traveler.value.dateOfBirth;
+        gender.value = traveler.value.gender;
+        address.value = traveler.value.address;
       } catch (e) {
         errorInitial.value = e;
         console.error(e);
@@ -148,21 +167,22 @@ export default defineComponent({
 
     onMounted(async () => {
       loadingInitial.value = true;
-      await getEmployee();
+      await getTraveler();
       loadingInitial.value = false;
     });
 
     return {
       loadingInitial,
       errorInitial,
-      employee,
+      traveler,
       loading,
       errors,
       givenName,
       familyName,
-      email,
-      phoneNumber,
-      updateEmployee,
+      dateOfBirth,
+      gender,
+      address,
+      updateTraveler,
     };
   },
 });

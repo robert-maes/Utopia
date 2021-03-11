@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="mt-1">Create a new Employee</h3>
+    <h3 class="mt-1">Create a new Traveler</h3>
     <div v-if="errors" class="alert alert-danger">
       <p v-if="errors.message">{{ errors.message }}</p>
       <ul v-else>
@@ -9,7 +9,7 @@
         </li>
       </ul>
     </div>
-    <form v-on:submit.prevent="createEmployee">
+    <form v-on:submit.prevent="createTraveler">
       <table>
         <tr>
           <td><label for="givenName" class="form-label">First Name:</label></td>
@@ -38,44 +38,39 @@
           </td>
         </tr>
         <tr>
-          <td><label for="username" class="form-label">Username:</label></td>
+          <td><label for="dateOfBirth" class="form-label">Birthday:</label></td>
+          <td>
+            <input
+              type="date"
+              required
+              id="dateOfBirth"
+              v-model="dateOfBirth"
+              class="form-control"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td><label for="gender" class="form-label">Gender:</label></td>
           <td>
             <input
               type="text"
               required
-              pattern="^[a-zA-Z0-9_]*$"
-              minlength="8"
               maxlength="255"
-              id="username"
-              v-model="username"
+              id="gender"
+              v-model="gender"
               class="form-control"
             />
           </td>
         </tr>
         <tr>
-          <td><label for="email" class="form-label">Email:</label></td>
+          <td><label for="address" class="form-label">Address:</label></td>
           <td>
             <input
-              type="email"
+              type="text"
               required
               maxlength="255"
-              id="email"
-              v-model="email"
-              class="form-control"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="phoneNumber" class="form-label">Phone Number:</label>
-          </td>
-          <td>
-            <input
-              type="tel"
-              pattern="^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$"
-              required
-              id="phoneNumber"
-              v-model="phoneNumber"
+              id="address"
+              v-model="address"
               class="form-control"
             />
           </td>
@@ -93,7 +88,7 @@
         </tr>
       </table>
     </form>
-    <router-link to="/employee" tag="button" class="btn btn-secondary mt-1"
+    <router-link to="/traveler" tag="button" class="btn btn-secondary mt-1"
       >Cancel</router-link
     >
   </div>
@@ -112,23 +107,23 @@ export default defineComponent({
     const router = useRouter();
     const givenName = ref("");
     const familyName = ref("");
-    const username = ref("");
-    const email = ref("");
-    const phoneNumber = ref("");
+    const dateOfBirth = ref("");
+    const gender = ref("");
+    const address = ref("");
 
-    const createEmployee = async () => {
+    const createTraveler = async () => {
       loading.value = true;
       errors.value = null;
       try {
-        await post("employee", {
+        await post("traveler", {
           givenName: givenName.value,
           familyName: familyName.value,
-          username: username.value,
-          email: email.value,
-          phoneNumber: phoneNumber.value,
+          dateOfBirth: dateOfBirth.value,
+          gender: gender.value,
+          address: address.value,
         });
         await router.push({
-          path: "/employee",
+          path: "/traveler",
         });
       } catch (e) {
         errors.value = JSON.parse(e.message);
@@ -142,10 +137,10 @@ export default defineComponent({
       errors,
       givenName,
       familyName,
-      username,
-      email,
-      phoneNumber,
-      createEmployee,
+      dateOfBirth,
+      gender,
+      address,
+      createTraveler,
     };
   },
 });

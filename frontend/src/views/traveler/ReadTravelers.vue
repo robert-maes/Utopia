@@ -1,11 +1,11 @@
 <template>
   <div v-if="loadingInitial">Loading...</div>
   <div v-else>
-    <div v-if="errorInitial">Oops! Unable to load employees.</div>
+    <div v-if="errorInitial">Oops! Unable to load travelers.</div>
     <div v-else>
-      <h3 class="mt-1">Employees 👔</h3>
-      <router-link to="/employee/add" tag="button" class="btn btn-primary"
-        >Create a new Employee</router-link
+      <h3 class="mt-1">Travelers 🧳</h3>
+      <router-link to="/traveler/add" tag="button" class="btn btn-primary"
+        >Create a new Traveler</router-link
       >
       <table class="table table-striped table-bordered table-sm mt-3">
         <thead>
@@ -13,24 +13,24 @@
             <th scope="col">ID</th>
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
-            <th scope="col">Username</th>
-            <th scope="col">Email</th>
-            <th scope="col">Phone Number</th>
+            <th scope="col">Birthday</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Address</th>
             <th scope="col"></th>
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="employee in employees" :key="employee.id">
-            <th scope="row">{{ employee.id }}</th>
-            <td>{{ employee.givenName }}</td>
-            <td>{{ employee.familyName }}</td>
-            <td>{{ employee.username }}</td>
-            <td>{{ employee.email }}</td>
-            <td>{{ employee.phoneNumber }}</td>
+          <tr v-for="traveler in travelers" :key="traveler.id">
+            <th scope="row">{{ traveler.id }}</th>
+            <td>{{ traveler.givenName }}</td>
+            <td>{{ traveler.familyName }}</td>
+            <td>{{ traveler.dateOfBirth }}</td>
+            <td>{{ traveler.gender }}</td>
+            <td>{{ traveler.address }}</td>
             <td>
               <router-link
-                :to="`/employee/${employee.id}/update`"
+                :to="`/traveler/${traveler.id}/update`"
                 tag="button"
                 class="btn btn-warning btn-sm"
                 >Update</router-link
@@ -39,7 +39,7 @@
             <td>
               <a
                 href="#"
-                @click="destroyEmployee(employee.id)"
+                @click="destroyTraveler(traveler.id)"
                 class="btn btn-danger btn-sm"
                 >Delete</a
               >
@@ -61,23 +61,23 @@ export default defineComponent({
   setup() {
     const loadingInitial = ref(true);
     const errorInitial = ref(null);
-    const employees = ref(null);
+    const travelers = ref(null);
 
-    const getEmployees = async () => {
+    const getTravelers = async () => {
       try {
-        employees.value = await get("employee");
+        travelers.value = await get("traveler");
       } catch (e) {
         errorInitial.value = e;
         console.error(e);
       }
     };
 
-    const destroyEmployee = async (employeeId) => {
+    const destroyTraveler = async (travelerId) => {
       try {
-        if (confirm("Are you sure you want to delete this employee?")) {
-          await destroy(`employee/${employeeId}`);
-          employees.value = employees.value.filter(
-            (employee) => employee.id !== employeeId
+        if (confirm("Are you sure you want to delete this traveler?")) {
+          await destroy(`traveler/${travelerId}`);
+          travelers.value = travelers.value.filter(
+            (traveler) => traveler.id !== travelerId
           );
         }
       } catch (e) {
@@ -87,15 +87,15 @@ export default defineComponent({
 
     onMounted(async () => {
       loadingInitial.value = true;
-      await getEmployees();
+      await getTravelers();
       loadingInitial.value = false;
     });
 
     return {
       loadingInitial,
       errorInitial,
-      employees,
-      destroyEmployee,
+      travelers,
+      destroyTraveler,
     };
   },
 });

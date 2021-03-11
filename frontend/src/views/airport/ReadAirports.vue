@@ -1,36 +1,28 @@
 <template>
   <div v-if="loadingInitial">Loading...</div>
   <div v-else>
-    <div v-if="errorInitial">Oops! Unable to load employees.</div>
+    <div v-if="errorInitial">Oops! Unable to load airports.</div>
     <div v-else>
-      <h3 class="mt-1">Employees 👔</h3>
-      <router-link to="/employee/add" tag="button" class="btn btn-primary"
-        >Create a new Employee</router-link
+      <h3 class="mt-1">Airports 🏙️</h3>
+      <router-link to="/airport/add" tag="button" class="btn btn-primary"
+        >Create a new Airport</router-link
       >
       <table class="table table-striped table-bordered table-sm mt-3">
         <thead>
           <tr class="table-primary">
-            <th scope="col">ID</th>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Username</th>
-            <th scope="col">Email</th>
-            <th scope="col">Phone Number</th>
+            <th scope="col">IATA ID</th>
+            <th scope="col">City</th>
             <th scope="col"></th>
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="employee in employees" :key="employee.id">
-            <th scope="row">{{ employee.id }}</th>
-            <td>{{ employee.givenName }}</td>
-            <td>{{ employee.familyName }}</td>
-            <td>{{ employee.username }}</td>
-            <td>{{ employee.email }}</td>
-            <td>{{ employee.phoneNumber }}</td>
+          <tr v-for="airport in airports" :key="airport.iataId">
+            <th scope="row">{{ airport.iataId }}</th>
+            <td>{{ airport.city }}</td>
             <td>
               <router-link
-                :to="`/employee/${employee.id}/update`"
+                :to="`/airport/${airport.iataId}/update`"
                 tag="button"
                 class="btn btn-warning btn-sm"
                 >Update</router-link
@@ -39,7 +31,7 @@
             <td>
               <a
                 href="#"
-                @click="destroyEmployee(employee.id)"
+                @click="destroyAirport(airport.iataId)"
                 class="btn btn-danger btn-sm"
                 >Delete</a
               >
@@ -61,23 +53,23 @@ export default defineComponent({
   setup() {
     const loadingInitial = ref(true);
     const errorInitial = ref(null);
-    const employees = ref(null);
+    const airports = ref(null);
 
-    const getEmployees = async () => {
+    const getAirports = async () => {
       try {
-        employees.value = await get("employee");
+        airports.value = await get("airport");
       } catch (e) {
         errorInitial.value = e;
         console.error(e);
       }
     };
 
-    const destroyEmployee = async (employeeId) => {
+    const destroyAirport = async (airportId) => {
       try {
-        if (confirm("Are you sure you want to delete this employee?")) {
-          await destroy(`employee/${employeeId}`);
-          employees.value = employees.value.filter(
-            (employee) => employee.id !== employeeId
+        if (confirm("Are you sure you want to delete this airport?")) {
+          await destroy(`airport/${airportId}`);
+          airports.value = airports.value.filter(
+            (airport) => airport.iataId !== airportId
           );
         }
       } catch (e) {
@@ -87,15 +79,15 @@ export default defineComponent({
 
     onMounted(async () => {
       loadingInitial.value = true;
-      await getEmployees();
+      await getAirports();
       loadingInitial.value = false;
     });
 
     return {
       loadingInitial,
       errorInitial,
-      employees,
-      destroyEmployee,
+      airports,
+      destroyAirport,
     };
   },
 });

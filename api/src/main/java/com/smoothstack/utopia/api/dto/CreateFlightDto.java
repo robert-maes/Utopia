@@ -30,11 +30,11 @@ public class CreateFlightDto {
   private String destinationAirportId;
 
   @NotNull(message = "Departure time is required")
-  @PastOrPresent(message = "Departure time must be a time")
+  //  @PastOrPresent(message = "Departure time must be a time")
   private Instant departureTime;
 
   @NotNull(message = "Arrival time is required")
-  @PastOrPresent(message = "Arrival time must be a time")
+  //  @PastOrPresent(message = "Arrival time must be a time")
   private Instant arrivalTime;
 
   @NotNull(message = "Seat price is required")

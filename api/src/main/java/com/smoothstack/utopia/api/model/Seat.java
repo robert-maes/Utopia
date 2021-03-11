@@ -1,6 +1,7 @@
 package com.smoothstack.utopia.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.smoothstack.utopia.api.SeatClass;
 import javax.persistence.*;
@@ -13,10 +14,12 @@ public class Seat {
   @GeneratedValue
   private Long id;
 
+  @JsonIgnoreProperties({ "seats" })
   @ManyToOne(optional = false)
   private Flight flight;
 
-  @OneToOne(optional = true)
+  @JsonIgnoreProperties({ "seat" })
+  @OneToOne(optional = true, mappedBy = "seat")
   private Ticket ticket;
 
   @Enumerated(EnumType.ORDINAL)

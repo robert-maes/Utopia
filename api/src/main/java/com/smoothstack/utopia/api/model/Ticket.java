@@ -1,5 +1,6 @@
 package com.smoothstack.utopia.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.UUID;
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public class Ticket {
   @Column(nullable = false)
   private Boolean isActive;
 
+  @JsonIgnoreProperties({ "tickets" })
   @ManyToOne(optional = false)
   private Traveler traveler;
 

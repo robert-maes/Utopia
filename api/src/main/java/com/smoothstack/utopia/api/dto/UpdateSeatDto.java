@@ -10,10 +10,7 @@ public class UpdateSeatDto {
   private Optional<@Positive(
     message = "Flight ID must be a positive number"
   ) Long> flightId = Optional.empty();
-  private Optional<@Pattern(
-    regexp = "FIRST|BUSINESS|ECONOMY",
-    message = "Seat class must be FIRST, BUSINESS or ECONOMY"
-  ) SeatClass> seatClass = Optional.empty();
+  private Optional<SeatClass> seatClass = Optional.empty();
 
   public Optional<Long> getFlightId() {
     return flightId;

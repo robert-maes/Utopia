@@ -1,8 +1,11 @@
 package com.smoothstack.utopia.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.Instant;
 import java.util.List;
 import javax.persistence.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table
@@ -36,7 +39,8 @@ public class Flight {
   @Column(nullable = false)
   private Integer totalSeats;
 
-  @OneToMany
+  @JsonIgnoreProperties({ "flight" })
+  @OneToMany(mappedBy = "flight")
   private List<Seat> seats;
 
   public Flight() {}
@@ -65,7 +69,17 @@ public class Flight {
 
   public Integer getReservedSeats() {
     return Math.toIntExact(
-      seats.stream().filter(seat -> seat.getTicket().getActive()).count()
+      seats
+        .stream()
+        .filter(
+          seat -> {
+            if (seat.getTicket() != null) {
+              return seat.getTicket().getActive();
+            }
+            return false;
+          }
+        )
+        .count()
     );
   }
 
